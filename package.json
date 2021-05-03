@@ -1,0 +1,54 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint *.ts *.tsx --no-error-on-unmatched-pattern",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "bootstrap": "^4.6.0",
+    "module-alias": "^2.2.2",
+    "next": "10.0.8",
+    "react": "17.0.1",
+    "react-bootstrap": "^1.5.2",
+    "react-dom": "17.0.1",
+    "react-icons": "^4.2.0",
+    "react-login-github": "^1.0.7",
+    "react-pdf": "^5.2.0",
+    "react-responsive": "^8.2.0",
+    "react-social-login-buttons": "^3.4.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.2",
+    "@types/react-pdf": "^5.0.2",
+    "@types/react-responsive": "^8.0.2",
+    "@types/styled-components": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "babel-plugin-inline-react-svg": "^2.0.1",
+    "babel-plugin-styled-components": "^1.12.0",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-import-helpers": "^1.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.3"
+  },
+  "_moduleAliases": {
+    "@": "src"
+  }
+}
