@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Router from 'next/router'
 import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 
@@ -99,8 +98,6 @@ const Login: React.FC = () => {
       await register(name, regEmail, regPassword)
 
       await logIn(regEmail, regPassword)
-
-      Router.reload()
     } catch (error) {
       const validationErrors = {}
 
