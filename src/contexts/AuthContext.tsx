@@ -8,6 +8,7 @@ export interface AuthContextData {
   isSigned: boolean | null
   token: string | null
   logIn(email: string, password: string): Promise<ApiStatus>
+  register(name: string, email: string, password: string): void
   logOut(): void
 }
 
@@ -59,12 +60,24 @@ const AuthContextProvider: React.FC = ({ children }) => {
     }
   }
 
+  async function register(name: string, email: string, password: string) {
+    try {
+      await api.post('user/create-find/', {
+        name: name,
+        email: email,
+        password: password
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   function logOut() {
     setToken(null)
   }
 
   return (
-    <AuthContext.Provider value={{ isSigned, token, logIn, logOut }}>
+    <AuthContext.Provider value={{ isSigned, token, logIn, register, logOut }}>
       {children}
     </AuthContext.Provider>
   )

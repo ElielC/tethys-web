@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import Router from 'next/router'
 import { useRef, useState } from 'react'
 import * as Yup from 'yup'
 
@@ -23,26 +24,28 @@ const emailValidation = Yup.string()
   .required('Informe o email')
 
 const passwordValidation = Yup.string()
-  .max(20, 'A senha deve conter no máximo 20 caracteres')
-  .min(5, 'A senha deve conter no mínimo 5 caracteres')
+  .max(20, 'No máximo 20 caracteres')
+  .min(5, 'No mínimo 5 caracteres')
   .required('Informe a senha')
+
+const nameValidation = Yup.string()
+  .max(50, 'No máximo 50 caracteres')
+  .min(5, 'No mínimo 5 caracteres')
+  .required('Informe o nome')
 
 const Login: React.FC = () => {
   const loginRef = useRef<FormHandles>()
   const registerRef = useRef<FormHandles>()
 
-  const { logIn } = useAuthContext()
+  const { logIn, register } = useAuthContext()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const [name, setName] = useState('')
   const [regEmail, setRegEmail] = useState('')
-  const [regpassword, setRegPassword] = useState('')
+  const [regPassword, setRegPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-
-  function dumySubmit() {
-    console.log('here')
-  }
 
   async function handleLogin() {
     try {
@@ -67,6 +70,46 @@ const Login: React.FC = () => {
         })
 
         loginRef.current?.setErrors(validationErrors)
+      }
+    }
+  }
+
+  async function handleRegister() {
+    try {
+      registerRef.current?.setErrors({})
+
+      const schema = Yup.object().shape({
+        name: nameValidation,
+        regEmail: emailValidation,
+        regPassword: passwordValidation,
+        confirmPassword: Yup.string().test(
+          'passwords-match',
+          'Senhas precisam ser iguais',
+          function (value) {
+            return regPassword === value
+          }
+        )
+      })
+
+      await schema.validate(
+        { name, regEmail, regPassword, confirmPassword },
+        { abortEarly: false }
+      )
+
+      await register(name, regEmail, regPassword)
+
+      await logIn(regEmail, regPassword)
+
+      Router.reload()
+    } catch (error) {
+      const validationErrors = {}
+
+      if (error instanceof Yup.ValidationError) {
+        error.inner.forEach(error => {
+          validationErrors[error.path!] = error.message
+        })
+
+        registerRef.current?.setErrors(validationErrors)
       }
     }
   }
@@ -108,7 +151,7 @@ const Login: React.FC = () => {
         <RegisterContainer>
           <Form
             ref={registerRef}
-            onSubmit={dumySubmit}
+            onSubmit={handleRegister}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -118,14 +161,33 @@ const Login: React.FC = () => {
             <Text fontWeight={700} size={'title.sm'}>
               Register
             </Text>
-            <Input name="email" label="E-mail:" />
-            <Input name="password" label="Password:" type="password" />
+            <Input
+              name="name"
+              label="Name:"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+            <Input
+              name="regEmail"
+              label="E-mail:"
+              value={regEmail}
+              onChange={e => setRegEmail(e.target.value)}
+            />
+            <Input
+              name="regPassword"
+              label="Password:"
+              type="password"
+              value={regPassword}
+              onChange={e => setRegPassword(e.target.value)}
+            />
             <Input
               name="confirmPassword"
               label="Confirm Password:"
               type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
             />
-            <GoButton>GO</GoButton>
+            <GoButton type={'submit'}>GO</GoButton>
           </Form>
         </RegisterContainer>
       </BodyContainer>
