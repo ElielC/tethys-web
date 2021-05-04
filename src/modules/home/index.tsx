@@ -1,29 +1,48 @@
+import { useEffect, useState } from 'react'
+
+import { api } from '@/api'
 import Header from '@/components/Header'
 import HomeWork from '@/components/HomeWork'
 
+import ProtectedModule from '../protectedModule'
 import { Container, BodyContainer } from './styles'
 
 const Home: React.FC = () => {
+  const [works, setWorks] = useState([])
+
+  useEffect(() => {
+    async function loadWorks() {
+      try {
+        const response = await api.get('work/list/')
+
+        setWorks(response.data.results)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    loadWorks()
+  }, [])
+
   return (
     <Container>
       <Header page="Home" />
 
       <BodyContainer>
-        <HomeWork
-          title="teste"
-          id="1"
-          author="teste"
-          description="aaaaaaaaaaaaaaaa"
-        />
-        <HomeWork
-          title="teste"
-          id="1"
-          author="teste"
-          description="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        />
+        <ul>
+          {works.map(work => (
+            <HomeWork
+              key={`work_${work.id}`}
+              id={work.id}
+              title={work.title}
+              description={work.description}
+              author={work.user.name}
+              url={work.file.url}
+            />
+          ))}
+        </ul>
       </BodyContainer>
     </Container>
   )
 }
 
-export default Home
+export default ProtectedModule(Home)

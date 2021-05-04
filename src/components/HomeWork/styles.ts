@@ -6,5 +6,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
+  padding-right: 0.4rem;
   box-shadow: 0px 1px 5px ${({ theme }) => theme.colors.green};
 `

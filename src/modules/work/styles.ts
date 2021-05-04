@@ -19,8 +19,7 @@ export const BodyContainer = styled.div`
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 0.5;
-  max-width: 50%;
+  width: 50%;
   height: 100%;
 `
 

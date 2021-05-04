@@ -1,11 +1,16 @@
 /* eslint-disable react/no-unescaped-entities */
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { pdfjs, Document, Page } from 'react-pdf/'
 
+import { api } from '@/api'
 import Header from '@/components/Header'
 import Text from '@/components/Text'
 import { faBookOpen, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import ProtectedModule from '../protectedModule'
 import {
   Container,
   BodyContainer,
@@ -22,6 +27,28 @@ import {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const Home: React.FC = () => {
+  const router = useRouter()
+
+  const [work, setWork] = useState(null)
+
+  useEffect(() => {
+    if (!router.isReady) return
+
+    const { id } = router.query
+
+    async function loadWorks() {
+      console.log(id)
+      try {
+        const response = await api.get(`work/get/${id}/`)
+
+        setWork(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    loadWorks()
+  }, [])
+
   return (
     <Container>
       <Header page="Work" />
@@ -36,11 +63,11 @@ const Home: React.FC = () => {
             }}
           >
             <Text fontWeight={550} size="title.md">
-              Work Title
+              {work?.title}
             </Text>
             <div style={{ width: '0.5rem' }} />
             <Text fontWeight={550} size="text.lg">
-              By Author's name
+              {work?.user.name}
             </Text>
           </div>
           <Line />
@@ -50,25 +77,22 @@ const Home: React.FC = () => {
               style={{ wordBreak: 'break-word', marginTop: '-10px' }}
               size="text.sm"
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+              {work?.description}
             </Text>
           </DescriptionContainer>
           <ButtonGroup>
-            <ReadButton>
-              Read <FontAwesomeIcon icon={faBookOpen} />
-            </ReadButton>
+            <Link href={`/view-work/${work?.id}`}>
+              <ReadButton>
+                Read <FontAwesomeIcon icon={faBookOpen} />
+              </ReadButton>
+            </Link>
+
             <SaveButton>
               Save <FontAwesomeIcon icon={faSave} />
             </SaveButton>
           </ButtonGroup>
           <PreviewContainer>
-            <Document file={'/assets/example.pdf'}>
+            <Document file={work?.file.url}>
               <div
                 style={{
                   display: 'flex',
@@ -77,10 +101,10 @@ const Home: React.FC = () => {
                 }}
               >
                 <div style={{ marginLeft: '0.5rem', marginTop: '0.5rem' }}>
-                  <Page pageNumber={2} width={240} />
+                  <Page pageNumber={2} width={250} />
                 </div>
                 <div style={{ marginRight: '0.5rem', marginTop: '0.5rem' }}>
-                  <Page pageNumber={3} width={240} />
+                  <Page pageNumber={3} width={250} />
                 </div>
               </div>
               <div
@@ -104,8 +128,8 @@ const Home: React.FC = () => {
           </PreviewContainer>
         </InfoContainer>
         <CoverContainer>
-          <Document file={'/assets/example.pdf'}>
-            <Page pageNumber={1} />
+          <Document file={work?.file.url}>
+            <Page pageNumber={1} width={600} />
           </Document>
         </CoverContainer>
       </BodyContainer>
@@ -113,4 +137,4 @@ const Home: React.FC = () => {
   )
 }
 
-export default Home
+export default ProtectedModule(Home)

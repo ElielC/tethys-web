@@ -2,6 +2,7 @@ import Header from '@/components/Header'
 import LibraryMenu from '@/components/LibraryMenu'
 import LibraryWork from '@/components/LibraryWork'
 
+import ProtectedModule from '../protectedModule'
 import { Container, BodyContainer, WorksContainer } from './styles'
 
 const Library: React.FC = () => {
@@ -19,4 +20,4 @@ const Library: React.FC = () => {
   )
 }
 
-export default Library
+export default ProtectedModule(Library)
