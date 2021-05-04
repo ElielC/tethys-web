@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { Ref, useEffect, useRef } from 'react'
 
 import { useField } from '@unform/core'
 
@@ -10,6 +10,7 @@ interface OwnProps {
   label: string
   handleIcon?: () => void
   disabledIcon?: boolean
+  ref?: Ref<HTMLInputElement>
   icon?: never
 }
 
