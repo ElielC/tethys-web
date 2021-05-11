@@ -5,6 +5,7 @@ import ApiStatus from '@/enums/ApiStatus'
 import usePersistedState from '@/hooks/usePersistedState'
 
 export interface AuthContextData {
+  id: string
   isSigned: boolean | null
   token: string | null
   logIn(email: string, password: string): Promise<ApiStatus>
@@ -17,12 +18,9 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 const AuthContextProvider: React.FC = ({ children }) => {
   const [isSigned, setIsSigned] = useState<boolean | null>(null)
   const [token, setToken] = usePersistedState<string | null>('@token', null)
+  const [id, setId] = useState<string>('')
 
   useEffect(() => {
-    if (token) {
-      api.defaults.headers.Authorization = `Bearer ${token}`
-    }
-
     async function validate() {
       try {
         const response = await api.post('user/verify/')
@@ -31,12 +29,20 @@ const AuthContextProvider: React.FC = ({ children }) => {
           setIsSigned(false)
         } else {
           setIsSigned(true)
+          setId(response.data.id)
         }
       } catch (err) {
         setIsSigned(false)
       }
     }
-    validate()
+
+    if (token) {
+      api.defaults.headers.Authorization = `Bearer ${token}`
+
+      validate()
+    } else {
+      setIsSigned(false)
+    }
   }, [token])
 
   async function logIn(email: string, password: string): Promise<ApiStatus> {
@@ -53,6 +59,8 @@ const AuthContextProvider: React.FC = ({ children }) => {
       setToken(response.data.access)
 
       api.defaults.headers.Authorization = `Bearer ${response.data.access}`
+
+      setIsSigned(true)
 
       return ApiStatus.HTTP_200_OK
     } catch (err) {
@@ -77,7 +85,9 @@ const AuthContextProvider: React.FC = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isSigned, token, logIn, register, logOut }}>
+    <AuthContext.Provider
+      value={{ id, isSigned, token, logIn, register, logOut }}
+    >
       {children}
     </AuthContext.Provider>
   )

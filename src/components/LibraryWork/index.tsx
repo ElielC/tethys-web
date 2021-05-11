@@ -1,5 +1,6 @@
 /* eslint-disable multiline-ternary */
 
+import Link from 'next/link'
 import { Document, Page, pdfjs } from 'react-pdf'
 
 import Text from '../Text'
@@ -13,16 +14,18 @@ interface LibraryWorkProps {
   url: string
 }
 
-const LibraryWork: React.FC<LibraryWorkProps> = ({ title, url }) => {
+const LibraryWork: React.FC<LibraryWorkProps> = ({ id, title, url }) => {
   return (
-    <Container>
-      <Text fontWeight={700} size={'text.md'}>
-        {title}
-      </Text>
-      <Document file={url}>
-        <Page pageNumber={1} width={250} />
-      </Document>
-    </Container>
+    <Link href={`/work/${id}`}>
+      <Container>
+        <Text fontWeight={700} size={'text.md'}>
+          {title}
+        </Text>
+        <Document file={url}>
+          <Page pageNumber={1} width={250} />
+        </Document>
+      </Container>
+    </Link>
   )
 }
 

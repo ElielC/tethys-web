@@ -27,27 +27,38 @@ export const Spacer = styled.div`
   height: 100%;
 `
 
-export const MenuButton = styled(Button)`
+interface MenuButtonProps {
+  isActive?: boolean
+}
+export const MenuButton = styled(Button)<MenuButtonProps>`
   width: 90%;
   border-radius: 5px;
   color: ${({ theme }) => theme.colors.black};
   font-size: 1.2rem;
-  background-color: ${({ theme }) => theme.colors.green};
-  border-color: ${({ theme }) => theme.colors.green};
+  background-color: ${({ theme }) => props =>
+    props.isActive ? theme.colors.orange : theme.colors.green};
+  border-color: ${({ theme }) => props =>
+    props.isActive ? theme.colors.orange : theme.colors.green};
   font-weight: 500;
   z-index: 1;
 
   :hover {
     filter: opacity(80%);
     color: ${({ theme }) => theme.colors.black};
-    background-color: ${({ theme }) => theme.colors.green};
-    border-color: ${({ theme }) => theme.colors.green};
+    background-color: ${({ theme }) => props =>
+      props.isActive ? theme.colors.orange : theme.colors.green};
+    border-color: ${({ theme }) => props =>
+      props.isActive ? theme.colors.orange : theme.colors.green};
   }
 
   &&&&:focus {
     color: ${({ theme }) => theme.colors.black};
-    background-color: ${({ theme }) => theme.colors.green};
-    border-color: ${({ theme }) => theme.colors.green};
-    box-shadow: 0 0 5px ${({ theme }) => theme.colors.green};
+    background-color: ${({ theme }) => props =>
+      props.isActive ? theme.colors.orange : theme.colors.green};
+    border-color: ${({ theme }) => props =>
+      props.isActive ? theme.colors.orange : theme.colors.green};
+    box-shadow: 0 0 5px
+      ${({ theme }) => props =>
+        props.isActive ? theme.colors.orange : theme.colors.green};
   }
 `

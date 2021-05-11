@@ -24,7 +24,7 @@ export const Spacer = styled.div`
   flex-grow: 1;
 `
 
-export const IconButton = styled(Button)`
+export const OkButton = styled(Button)`
   color: ${({ theme }) => theme.colors.black};
   background-color: ${({ theme }) => theme.colors.green};
   border-color: ${({ theme }) => theme.colors.green};
@@ -42,5 +42,26 @@ export const IconButton = styled(Button)`
     background-color: ${({ theme }) => theme.colors.green};
     border-color: ${({ theme }) => theme.colors.green};
     box-shadow: 0 0 5px ${({ theme }) => theme.colors.green};
+  }
+`
+
+export const CancelButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.black};
+  background-color: ${({ theme }) => theme.colors.orange};
+  border-color: ${({ theme }) => theme.colors.orange};
+  font-weight: 500;
+
+  :hover {
+    filter: opacity(90%);
+    color: ${({ theme }) => theme.colors.black};
+    background-color: ${({ theme }) => theme.colors.orange};
+    border-color: ${({ theme }) => theme.colors.orange};
+  }
+
+  &&&&:focus {
+    color: ${({ theme }) => theme.colors.black};
+    background-color: ${({ theme }) => theme.colors.orange};
+    border-color: ${({ theme }) => theme.colors.orange};
+    box-shadow: 0 0 5px ${({ theme }) => theme.colors.orange};
   }
 `
