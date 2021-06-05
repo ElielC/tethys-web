@@ -6,9 +6,9 @@ import Login from '@/pages'
 
 // this module returns the login component if the user is not logged in
 const ProtectedModule = Component => {
-  const { isSigned } = useAuthContext()
-
   const Auth = props => {
+    const { isSigned } = useAuthContext()
+
     if (isSigned === null) {
       return <></>
     } else if (!isSigned) {
